@@ -2,34 +2,14 @@
 - name: Artifact Registry access patch
   hosts: all
   tasks:
-  - name: Store pull secret
-    shell: |
-      ./bin/kubectl get secret artifact-registry-secret -o json | jq --sort-keys \
-          'del(
-            .metadata.annotations."kubectl.kubernetes.io/last-applied-configuration",
-            .metadata.annotations."control-plane.alpha.kubernetes.io/leader",
-            .metadata.uid,
-            .metadata.selfLink,
-            .metadata.resourceVersion,
-            .metadata.creationTimestamp,
-            .metadata.generation,
-            .metadata.namespace,
-            .metadata.managedFields
-        )'
-    register: artifactory_secret
-    delegate_to: localhost
-
-#    - name: Create pull secret on device
-#      command: echo "{{artifactory_secret}}" | kubectl apply -f -n default -
-#
-#  - name: Copy resource to device
-#    ansible.builtin.copy:
-#      src: resource.json
-#      dest: /tmp/resource.json
-#      mode: '0600'
+  - name: Copy resource to device
+    ansible.builtin.copy:
+      src: resource.json
+      dest: /tmp/resource.json
+      mode: '0600'
 
   - name: Create pull secret on device
-    command: echo "{{artifactory_secret}}" | kubectl -n default apply -f -
+    command: cat /tmp/resource.json | kubectl -n default apply -f -
 
   - name: Patch default sa with pull secret
     command: |
