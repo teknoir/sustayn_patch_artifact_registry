@@ -24,7 +24,7 @@
     "z": "5c04600e5656563e",
     "g": "2ebeb77d78ec7f92",
     "name": "Patch Artifact Registry access args",
-    "func": "msg.payload = { \"args\": {\n    \"playbook_git_repo\": \"https://github.com/teknoir/sustayn_patch_artifact_registry.git\",\n    \"playbook_path\": \"patch_ar_access.yaml\",\n    \"ansible_limit\": \"!ar_access_enabled\",\n    \"add_device_label\": \"ar_access=enabled\"\n}};\nreturn msg;\n",
+    "func": "msg.payload = { \"args\": {\n    \"playbook_git_repo\": \"https://github.com/teknoir/sustayn_patch_artifact_registry.git\",\n    \"playbook_path\": \"patch_ar_access.yaml\",\n    \"ansible_limit\": \"hardware_nvidia_jetson_nano_b00,!ar_access_enabled\",\n    \"add_device_label\": \"ar_access=enabled\"\n}};\nreturn msg;\n",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",
