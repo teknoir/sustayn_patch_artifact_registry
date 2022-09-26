@@ -9,7 +9,7 @@
       mode: '0600'
 
   - name: Create pull secret on device
-    command: cat /tmp/resource.json | kubectl apply -f -n default -
+    command: cat /tmp/resource.json | kubectl -n default apply -f -
 
   - name: Patch default sa with pull secret
     command: |
