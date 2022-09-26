@@ -1,0 +1,24 @@
+---
+- name: Artifact Registry access patch
+  hosts: all
+  tasks:
+  - name: Copy resource to device
+    ansible.builtin.copy:
+      src: resource.json
+      dest: /tmp/resource.json
+      mode: '0600'
+
+  - name: Create pull secret on device
+    command: cat /tmp/resource.json | kubectl apply -f -n default -
+
+  - name: Patch default sa with pull secret
+    command: |
+        kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "artifact-registry-secret"}]}'
+
+  - name: Add Patch 004 applied text to motd
+    ansible.builtin.lineinfile:
+      path: /etc/update-motd.d/00-header
+      regexp: '^.*Artifact Registry Access : enabled'
+      line: 'printf " * Artifact Registry Access : enabled\n"'
+      state: present
+      create: yes

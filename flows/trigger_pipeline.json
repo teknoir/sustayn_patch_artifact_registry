@@ -1,0 +1,802 @@
+[
+  {
+    "id": "2ebeb77d78ec7f92",
+    "type": "group",
+    "z": "5c04600e5656563e",
+    "name": "Ansible Pipeline",
+    "style": {
+      "stroke": "#ffff00",
+      "label": true
+    },
+    "nodes": [
+      "576103deb9bc7a3a",
+      "e012a1ee2485a274",
+      "7c10bc8301c2452d"
+    ],
+    "x": 94,
+    "y": 79,
+    "w": 912,
+    "h": 82
+  },
+  {
+    "id": "576103deb9bc7a3a",
+    "type": "function",
+    "z": "5c04600e5656563e",
+    "g": "2ebeb77d78ec7f92",
+    "name": "Patch Artifact Registry access args",
+    "func": "msg.payload = { \"args\": {\n    \"playbook_git_repo\": \"https://github.com/teknoir/sustayn_patch_artifact_registry.git\",\n    \"playbook_path\": \"patch_ar_access.yaml\",\n    \"ansible_limit\": \"!ar_access_enabled\",\n    \"add_device_label\": \"ar_access=enabled\"\n}};\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 120,
+    "wires": [
+      [
+        "7c10bc8301c2452d"
+      ]
+    ]
+  },
+  {
+    "id": "e012a1ee2485a274",
+    "type": "inject",
+    "z": "5c04600e5656563e",
+    "g": "2ebeb77d78ec7f92",
+    "name": "Start Pipelines",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "00 08 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 220,
+    "y": 120,
+    "wires": [
+      [
+        "576103deb9bc7a3a"
+      ]
+    ]
+  },
+  {
+    "id": "7c10bc8301c2452d",
+    "type": "run-existing-and-poll",
+    "z": "5c04600e5656563e",
+    "g": "2ebeb77d78ec7f92",
+    "name": "Run Artifact registry patch pipeline",
+    "runName": "Artifact registry patch",
+    "selectedPipeline": "2b57a9e0-057f-4da2-a102-3f1f639cd841",
+    "pipelineArguments": [
+      {
+        "name": "playbook_git_repo"
+      },
+      {
+        "name": "playbook_path"
+      },
+      {
+        "name": "ansible_limit"
+      },
+      {
+        "name": "add_device_label"
+      }
+    ],
+    "userArguments": [],
+    "pipelines": [
+      {
+        "id": "2b57a9e0-057f-4da2-a102-3f1f639cd841",
+        "created_at": "2022-09-26T07:01:00Z",
+        "name": "Ansible pipeline",
+        "description": "A Kubeflow pipeline running Ansible playbook from a git repo on a subset of devices",
+        "parameters": [
+          {
+            "name": "playbook_git_repo"
+          },
+          {
+            "name": "playbook_path"
+          },
+          {
+            "name": "ansible_limit"
+          },
+          {
+            "name": "add_device_label"
+          }
+        ],
+        "default_version": {
+          "id": "d75d5474-f49b-4232-b188-3bfb7dedafa3",
+          "name": "Ansible pipeline - fe8a70",
+          "created_at": "2022-09-26T11:01:19Z",
+          "parameters": [
+            {
+              "name": "playbook_git_repo"
+            },
+            {
+              "name": "playbook_path"
+            },
+            {
+              "name": "ansible_limit"
+            },
+            {
+              "name": "add_device_label"
+            }
+          ],
+          "resource_references": [
+            {
+              "key": {
+                "type": "PIPELINE",
+                "id": "2b57a9e0-057f-4da2-a102-3f1f639cd841"
+              },
+              "relationship": "OWNER"
+            }
+          ]
+        }
+      },
+      {
+        "id": "a9bf507b-b634-488b-9e16-98351ff1d2d2",
+        "created_at": "2022-09-10T13:03:33Z",
+        "name": "Build YOLOv7 App",
+        "description": "A pipeline to build custom YOLOv7 Apps",
+        "parameters": [
+          {
+            "name": "image_name"
+          },
+          {
+            "name": "model_name"
+          },
+          {
+            "name": "img_size"
+          },
+          {
+            "name": "namespace"
+          },
+          {
+            "name": "domain"
+          }
+        ],
+        "default_version": {
+          "id": "309dee8a-b82b-4892-afce-ffdcf506b001",
+          "name": "Build YOLOv7 App - 7881ff",
+          "created_at": "2022-09-16T12:18:52Z",
+          "parameters": [
+            {
+              "name": "image_name"
+            },
+            {
+              "name": "model_name"
+            },
+            {
+              "name": "img_size"
+            },
+            {
+              "name": "namespace"
+            },
+            {
+              "name": "domain"
+            }
+          ],
+          "resource_references": [
+            {
+              "key": {
+                "type": "PIPELINE",
+                "id": "a9bf507b-b634-488b-9e16-98351ff1d2d2"
+              },
+              "relationship": "OWNER"
+            }
+          ]
+        }
+      },
+      {
+        "id": "433fcda9-ba95-41fa-a723-9b36f153523f",
+        "created_at": "2022-08-31T09:39:24Z",
+        "name": "Patch device",
+        "description": "A Kubeflow pipeline running Ansible playbook from a git repo on a subset of devices",
+        "parameters": [
+          {
+            "name": "playbook_repo"
+          },
+          {
+            "name": "playbook_path"
+          },
+          {
+            "name": "ansible_limit"
+          }
+        ],
+        "default_version": {
+          "id": "6c5bd4bd-563b-4887-b0d2-5a9d23b73b36",
+          "name": "Patch device - 5b9022",
+          "created_at": "2022-09-23T21:02:11Z",
+          "parameters": [
+            {
+              "name": "playbook_git_repo"
+            },
+            {
+              "name": "playbook_path"
+            },
+            {
+              "name": "ansible_limit"
+            },
+            {
+              "name": "add_device_label"
+            }
+          ],
+          "resource_references": [
+            {
+              "key": {
+                "type": "PIPELINE",
+                "id": "433fcda9-ba95-41fa-a723-9b36f153523f"
+              },
+              "relationship": "OWNER"
+            }
+          ]
+        }
+      },
+      {
+        "id": "19ea7c9d-bd96-4337-bf83-29b264790f4f",
+        "created_at": "2022-08-20T19:35:55Z",
+        "name": "Prepare Labelstudio Data for YOLOv7 Model Training",
+        "description": "A pipeline to prepare LabelStudio data for YOLOv7 model training",
+        "parameters": [
+          {
+            "name": "labelstudio_project"
+          },
+          {
+            "name": "labels"
+          },
+          {
+            "name": "namespace"
+          },
+          {
+            "name": "domain"
+          },
+          {
+            "name": "train_frac",
+            "value": "0.7"
+          },
+          {
+            "name": "validate_frac",
+            "value": "0.2"
+          },
+          {
+            "name": "shuffle_data",
+            "value": "False"
+          }
+        ],
+        "default_version": {
+          "id": "ef0b5253-f252-4f57-870a-6c5fd2f3e412",
+          "name": "Prepare Labelstudio Data for YOLOv7 Model Training - c65754",
+          "created_at": "2022-08-20T19:37:52Z",
+          "parameters": [
+            {
+              "name": "labelstudio_project"
+            },
+            {
+              "name": "labels"
+            },
+            {
+              "name": "namespace"
+            },
+            {
+              "name": "domain"
+            },
+            {
+              "name": "train_frac",
+              "value": "0.7"
+            },
+            {
+              "name": "validate_frac",
+              "value": "0.2"
+            },
+            {
+              "name": "shuffle_data",
+              "value": "False"
+            }
+          ],
+          "resource_references": [
+            {
+              "key": {
+                "type": "PIPELINE",
+                "id": "19ea7c9d-bd96-4337-bf83-29b264790f4f"
+              },
+              "relationship": "OWNER"
+            }
+          ]
+        }
+      },
+      {
+        "id": "9da8918e-3b15-48ba-9b49-d43ca3bb307f",
+        "created_at": "2022-08-17T20:36:51Z",
+        "name": "Train YOLOv7 with Labelstudio and 1 T4 GPU",
+        "description": "A pipeline to train YOLOv7 on a custom data set from Teknoir Labelstudio. Transfer learn from \"transfer_weights.\"",
+        "parameters": [
+          {
+            "name": "model_name"
+          },
+          {
+            "name": "labelstudio_project"
+          },
+          {
+            "name": "labels"
+          },
+          {
+            "name": "namespace"
+          },
+          {
+            "name": "domain"
+          },
+          {
+            "name": "config_template_url",
+            "value": "gs://teknoir-ai.teknoir.cloud/yolov7/cfg/yolov7-tiny-config-template.yaml"
+          },
+          {
+            "name": "transfer_weights_url",
+            "value": "gs://teknoir-ai.teknoir.cloud/yolov7/weights/yolov7_training.pt"
+          },
+          {
+            "name": "hyp_file_url",
+            "value": "gs://teknoir-ai.teknoir.cloud/yolov7/hyp/hyp.scratch.tiny.yaml"
+          },
+          {
+            "name": "train_frac",
+            "value": "0.7"
+          },
+          {
+            "name": "validate_frac",
+            "value": "0.2"
+          },
+          {
+            "name": "batch_size",
+            "value": "32"
+          },
+          {
+            "name": "img_size_train",
+            "value": "640"
+          },
+          {
+            "name": "img_size_test",
+            "value": "640"
+          },
+          {
+            "name": "epochs",
+            "value": "300"
+          }
+        ],
+        "default_version": {
+          "id": "f73ffe6e-3ef0-48b5-922d-2b785765821f",
+          "name": "Train YOLOv7 with Labelstudio and 1 T4 GPU - 1fd10f",
+          "created_at": "2022-08-30T16:03:40Z",
+          "parameters": [
+            {
+              "name": "model_name"
+            },
+            {
+              "name": "labelstudio_project"
+            },
+            {
+              "name": "labels"
+            },
+            {
+              "name": "namespace"
+            },
+            {
+              "name": "domain"
+            },
+            {
+              "name": "config_template_url",
+              "value": "gs://teknoir-ai.teknoir.cloud/yolov7/cfg/yolov7-tiny-config-template.yaml"
+            },
+            {
+              "name": "transfer_weights_url",
+              "value": "gs://teknoir-ai.teknoir.cloud/yolov7/weights/yolov7_training.pt"
+            },
+            {
+              "name": "hyp_file_url",
+              "value": "gs://teknoir-ai.teknoir.cloud/yolov7/hyp/hyp.scratch.tiny.yaml"
+            },
+            {
+              "name": "train_frac",
+              "value": "0.7"
+            },
+            {
+              "name": "validate_frac",
+              "value": "0.2"
+            },
+            {
+              "name": "batch_size",
+              "value": "16"
+            },
+            {
+              "name": "img_size_train",
+              "value": "416"
+            },
+            {
+              "name": "img_size_test",
+              "value": "416"
+            },
+            {
+              "name": "epochs",
+              "value": "300"
+            },
+            {
+              "name": "disk_space",
+              "value": "10000Mi"
+            }
+          ],
+          "resource_references": [
+            {
+              "key": {
+                "type": "PIPELINE",
+                "id": "9da8918e-3b15-48ba-9b49-d43ca3bb307f"
+              },
+              "relationship": "OWNER"
+            }
+          ]
+        }
+      },
+      {
+        "id": "2f23a9dc-194c-4adb-a9d7-ddf61b367fef",
+        "created_at": "2022-06-07T05:59:59Z",
+        "name": "Build Systayn Event Processing App",
+        "description": "A pipeline to build the Systayn Event Processing App docker image",
+        "parameters": [
+          {
+            "name": "base_image"
+          },
+          {
+            "name": "base_image_tag_prefix"
+          },
+          {
+            "name": "image_name"
+          },
+          {
+            "name": "flows_name"
+          },
+          {
+            "name": "namespace"
+          },
+          {
+            "name": "domain"
+          }
+        ],
+        "default_version": {
+          "id": "337968a4-e805-45d1-8b0d-8077a301e30e",
+          "name": "Build Systayn Event Processing App - a39001",
+          "created_at": "2022-08-02T18:01:13Z",
+          "parameters": [
+            {
+              "name": "base_image"
+            },
+            {
+              "name": "base_image_tag_prefix"
+            },
+            {
+              "name": "image_name"
+            },
+            {
+              "name": "flows_name"
+            },
+            {
+              "name": "namespace"
+            },
+            {
+              "name": "domain"
+            }
+          ],
+          "resource_references": [
+            {
+              "key": {
+                "type": "PIPELINE",
+                "id": "2f23a9dc-194c-4adb-a9d7-ddf61b367fef"
+              },
+              "relationship": "OWNER"
+            }
+          ]
+        }
+      },
+      {
+        "id": "784bb823-20ce-4444-9dc2-389c38700c9b",
+        "created_at": "2022-03-21T07:44:51Z",
+        "name": "Build Deepstream Yolo MQTT App",
+        "description": "A pipeline to build custom Deepstream Yolo MQTT Apps",
+        "parameters": [
+          {
+            "name": "image_name"
+          },
+          {
+            "name": "model_name"
+          },
+          {
+            "name": "labels"
+          },
+          {
+            "name": "namespace"
+          },
+          {
+            "name": "domain"
+          }
+        ],
+        "default_version": {
+          "id": "db597576-5ea1-4a16-8a6d-3e4bd09dca67",
+          "name": "Build Deepstream Yolo MQTT App - ef66d0",
+          "created_at": "2022-03-23T10:31:55Z",
+          "parameters": [
+            {
+              "name": "image_name"
+            },
+            {
+              "name": "model_name"
+            },
+            {
+              "name": "labels"
+            },
+            {
+              "name": "namespace"
+            },
+            {
+              "name": "domain"
+            }
+          ],
+          "resource_references": [
+            {
+              "key": {
+                "type": "PIPELINE",
+                "id": "784bb823-20ce-4444-9dc2-389c38700c9b"
+              },
+              "relationship": "OWNER"
+            }
+          ]
+        }
+      },
+      {
+        "id": "98be0405-50c6-419f-8cb1-2b724a093a39",
+        "created_at": "2021-10-14T13:52:58Z",
+        "name": "Build Devstudio App",
+        "description": "A pipeline to build custom multi architecture Devstudio Apps",
+        "parameters": [
+          {
+            "name": "image_name"
+          },
+          {
+            "name": "flows_name"
+          },
+          {
+            "name": "namespace"
+          },
+          {
+            "name": "domain"
+          }
+        ],
+        "default_version": {
+          "id": "5535fe7e-47ed-42d4-ab3e-b10f3eabcfdc",
+          "name": "Build Devstudio App - 163980",
+          "created_at": "2021-10-21T11:49:41Z",
+          "parameters": [
+            {
+              "name": "base_image"
+            },
+            {
+              "name": "base_image_tag_prefix"
+            },
+            {
+              "name": "image_name"
+            },
+            {
+              "name": "flows_name"
+            },
+            {
+              "name": "namespace"
+            },
+            {
+              "name": "domain"
+            }
+          ],
+          "resource_references": [
+            {
+              "key": {
+                "type": "PIPELINE",
+                "id": "98be0405-50c6-419f-8cb1-2b724a093a39"
+              },
+              "relationship": "OWNER"
+            }
+          ]
+        }
+      },
+      {
+        "id": "671839ad-5f4e-43c4-8708-4c9981e4c816",
+        "created_at": "2021-10-08T07:53:43Z",
+        "name": "Patch_Artifactory_Access",
+        "default_version": {
+          "id": "35c9ebb4-bb34-4551-a137-239f2bd92a91",
+          "name": "v0.0.15",
+          "created_at": "2021-10-11T08:11:33Z",
+          "resource_references": [
+            {
+              "key": {
+                "type": "PIPELINE",
+                "id": "671839ad-5f4e-43c4-8708-4c9981e4c816"
+              },
+              "relationship": "OWNER"
+            }
+          ]
+        }
+      },
+      {
+        "id": "fbc05d67-a75a-47cc-9bab-affd814601cf",
+        "created_at": "2021-09-27T11:42:38Z",
+        "name": "Train YoloV4 Tiny with Labelstudio and 1 T4 GPU",
+        "description": "A pipeline to train Darknet YoloV4 Tiny on a custom data set from Teknoir Labelstudio",
+        "parameters": [
+          {
+            "name": "model_name"
+          },
+          {
+            "name": "labelstudio_project"
+          },
+          {
+            "name": "labels"
+          },
+          {
+            "name": "namespace"
+          },
+          {
+            "name": "domain"
+          }
+        ],
+        "default_version": {
+          "id": "35383af1-b03f-44af-bee8-642ed6ff9998",
+          "name": "Train YoloV4 Tiny with Labelstudio and 1 T4 GPU - 092e4d",
+          "created_at": "2022-07-07T15:26:26Z",
+          "parameters": [
+            {
+              "name": "model_name"
+            },
+            {
+              "name": "labelstudio_project"
+            },
+            {
+              "name": "labels"
+            },
+            {
+              "name": "namespace"
+            },
+            {
+              "name": "domain"
+            },
+            {
+              "name": "retrain_url"
+            }
+          ],
+          "resource_references": [
+            {
+              "key": {
+                "type": "PIPELINE",
+                "id": "fbc05d67-a75a-47cc-9bab-affd814601cf"
+              },
+              "relationship": "OWNER"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ffbf89c1-f49b-46d9-9386-38f25b730f18",
+        "created_at": "2021-09-27T11:34:17Z",
+        "name": "Build Darknet App",
+        "description": "A pipeline to build custom multi architecture Darknet Apps",
+        "parameters": [
+          {
+            "name": "image_name"
+          },
+          {
+            "name": "model_name"
+          },
+          {
+            "name": "namespace"
+          },
+          {
+            "name": "domain"
+          }
+        ],
+        "default_version": {
+          "id": "80153601-1d61-4006-af45-8b551c684cfd",
+          "name": "Build Darknet App - 34a845",
+          "created_at": "2022-08-02T17:50:41Z",
+          "parameters": [
+            {
+              "name": "image_name"
+            },
+            {
+              "name": "model_name"
+            },
+            {
+              "name": "namespace"
+            },
+            {
+              "name": "domain"
+            }
+          ],
+          "resource_references": [
+            {
+              "key": {
+                "type": "PIPELINE",
+                "id": "ffbf89c1-f49b-46d9-9386-38f25b730f18"
+              },
+              "relationship": "OWNER"
+            }
+          ]
+        }
+      },
+      {
+        "id": "4eaf7a44-8b1d-4955-9808-0a5f4030820a",
+        "created_at": "2021-09-23T13:56:37Z",
+        "name": "IoT Core Usage Export",
+        "description": "A pipeline to that export all namespaces IoT Core usage to Bigquery",
+        "parameters": [
+          {
+            "name": "scheduled_time",
+            "value": "[[ScheduledTime]]"
+          },
+          {
+            "name": "current_time",
+            "value": "[[CurrentTime]]"
+          }
+        ],
+        "default_version": {
+          "id": "345e85fe-d45e-46c4-a2f1-2278b538f07a",
+          "name": "IoT Core Usage Export_version_at_2021-09-23T16:46:36.183Z",
+          "created_at": "2021-09-23T16:46:45Z",
+          "parameters": [
+            {
+              "name": "scheduled_time",
+              "value": "[[ScheduledTime]]"
+            },
+            {
+              "name": "current_time",
+              "value": "[[CurrentTime]]"
+            }
+          ],
+          "resource_references": [
+            {
+              "key": {
+                "type": "PIPELINE",
+                "id": "4eaf7a44-8b1d-4955-9808-0a5f4030820a"
+              },
+              "relationship": "OWNER"
+            }
+          ]
+        }
+      },
+      {
+        "id": "5a365228-9864-49dd-98c6-59f9acc8df9c",
+        "created_at": "2021-06-18T06:07:39Z",
+        "name": "Patch003",
+        "description": "Patches devices with 003 version",
+        "default_version": {
+          "id": "d4d3d40d-ca58-471e-9921-794840418528",
+          "name": "v0.0.11",
+          "created_at": "2022-08-31T20:15:40Z",
+          "resource_references": [
+            {
+              "key": {
+                "type": "PIPELINE",
+                "id": "5a365228-9864-49dd-98c6-59f9acc8df9c"
+              },
+              "relationship": "OWNER"
+            }
+          ]
+        }
+      }
+    ],
+    "agrumentsSelector": "args",
+    "agrumentsSelectorType": "msgPayload",
+    "triggerStatus": "Succeeded",
+    "x": 840,
+    "y": 120,
+    "wires": [
+      []
+    ]
+  }
+]
