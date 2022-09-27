@@ -9,11 +9,11 @@
       mode: '0600'
 
   - name: Create pull secret on device
-    command: cat /tmp/resource.json | kubectl -n default apply -f -
+    shell: cat /tmp/resource.json | kubectl -n default apply -f -
 
   - name: Patch default sa with pull secret
-    command: |
-        kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "artifact-registry-secret"}]}'
+    shell: |
+      kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "artifact-registry-secret"}]}'
 
   - name: Add Patch 004 applied text to motd
     ansible.builtin.lineinfile:
