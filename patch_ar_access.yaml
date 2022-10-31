@@ -2,12 +2,6 @@
 - name: Artifact Registry access patch
   hosts: all
   tasks:
-  - name: Copy secret to device
-    ansible.builtin.copy:
-      src: artifact-registry-secret.yaml
-      dest: /var/lib/rancher/k3s/server/manifests/artifact-registry-secret.yaml
-      mode: '0644'
-
   - name: Copy patch to device
     ansible.builtin.copy:
       src: teknoir_artifact_registry_patch.yaml
