@@ -2,18 +2,17 @@
 - name: Artifact Registry access patch
   hosts: all
   tasks:
-  - name: Copy resource to device
+  - name: Copy secret to device
     ansible.builtin.copy:
-      src: resource.json
-      dest: /tmp/resource.json
-      mode: '0600'
+      src: artifact-registry-secret.yaml
+      dest: /var/lib/rancher/k3s/server/manifests/artifact-registry-secret.yaml
+      mode: '0644'
 
-  - name: Create pull secret on device
-    shell: cat /tmp/resource.json | kubectl -n default apply -f -
-
-  - name: Patch default sa with pull secret
-    shell: |
-      kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "artifact-registry-secret"}]}'
+  - name: Copy patch to device
+    ansible.builtin.copy:
+      src: teknoir_artifact_registry_patch.yaml
+      dest: /var/lib/rancher/k3s/server/manifests/teknoir_artifact_registry_patch.yaml
+      mode: '0644'
 
   - name: Add Patch 004 applied text to motd
     ansible.builtin.lineinfile:

@@ -1,2 +1,6 @@
 .idea
 venv
+artifact-registry-secret.yaml
+failed_devices
+successful_devices
+inv
