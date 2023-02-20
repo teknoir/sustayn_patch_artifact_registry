@@ -5,8 +5,13 @@
   - name: Copy patch to device
     ansible.builtin.copy:
       src: teknoir_artifact_registry_patch.yaml
-      dest: /var/lib/rancher/k3s/server/manifests/teknoir_artifact_registry_patch.yaml
+      dest: /var/lib/rancher/k3s/server/manifests/teknoir-artifact-registry-patch.yaml
       mode: '0644'
+
+  - name: Remove file (old bad patch)
+    ansible.builtin.file:
+      path: /var/lib/rancher/k3s/server/manifests/teknoir_artifact_registry_patch.yaml
+      state: absent
 
   - name: Add Patch 004 applied text to motd
     ansible.builtin.lineinfile:
